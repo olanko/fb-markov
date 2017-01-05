@@ -5,13 +5,20 @@ import markovgen as mg
 import urllib.request as req
 import json
 import sys
+import ssl
 
 def fetch():
 	#apikey:n saa haettua osoitteesta: https://developers.facebook.com/tools/explorer
 
-	f = req.urlopen('https://graph.facebook.com/me/posts?until=now&fields=message&limit=1000&access_token=CAACEdEose0cBAO58O0w92dBgQs7kbZBLGpwZCrZCP8znSHyFYuXch40PSP1BxJ7qRx8EqjQMNTZBRjqZACgAyTCfPYcdEcvpMfKNCSnUxOSXmhyxMjl7vN982SHSs3tFzZBpA3nhHJpZCcfgHqjqBJQO7nT2QklRqBiwyZAkwUFgQfsONcqOK3d7ZAQpyCZBNDrS0xDh75dfgCrRXormsINxJu')
+	ctx = ssl.create_default_context()
+	ctx.check_hostname = False
+	ctx.verify_mode = ssl.CERT_NONE
 
-	d = json.loads(f.readall().decode('utf-8'))
+	f = req.urlopen('https://graph.facebook.com/me/posts?until=now&fields=message&limit=1000&access_token=API_KEY', context=ctx)
+	d = json.loads(f.read().decode('utf-8'))
+
+#	f = open('posts.js', 'r')
+#	d = json.loads(f.read())
 
 	wf = open('fswords.txt', 'w')
 
